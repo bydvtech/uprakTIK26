@@ -54,7 +54,10 @@ table{width:100%;border-collapse:collapse;margin:14px 0;text-align:left}td,th{pa
 .dd{position:relative}.ddm{margin-top:6px;animation:pop .25s ease}
 .ddi{display:flex;justify-content:space-between;width:100%;text-align:left;margin:7px 0 0;background:rgba(255,255,255,.55);color:#111;border:1px solid rgba(255,255,255,.9);box-shadow:0 4px 14px rgba(0,0,0,.1),inset 0 1px 0 #fff}
 .ddi:hover:not(:disabled){border-color:#111}
-@media(max-width:520px){.grid{grid-template-columns:repeat(5,1fr)}.card{padding:18px}}
+#s2{max-width:1120px}
+.left{background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.9);border-radius:20px;padding:20px;margin-bottom:6px;box-shadow:0 6px 24px rgba(0,0,0,.08),inset 0 1px 0 #fff}
+@media(min-width:900px){.split{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:stretch}.left{padding:36px;margin:0;display:flex;flex-direction:column;justify-content:center}.left h2{font-size:clamp(1.5rem,2.3vw,2.2rem);line-height:1.4;margin-top:12px}.left .qn{font-size:.9rem}.opt{padding:14px 20px}}
+@media(max-width:520px){.grid{grid-template-columns:repeat(5,1fr)}.card{padding:18px}.nav{gap:6px}.nav button{flex:1;min-width:0;padding:12px 6px;font-size:.85rem}}
 </style></head><body>
 <div class="card" id="s1">
 <h1>Asesmen Sumatif Informatika</h1><p class="sub">Kelas X - Semester 1 | 50 soal pilihan ganda</p>
@@ -65,11 +68,12 @@ table{width:100%;border-collapse:collapse;margin:14px 0;text-align:left}td,th{pa
 
 <div class="card hide" id="s2">
 <div class="top"><b id="info"></b><span class="chip" id="stat"></span></div><div class="bar"><i id="pb"></i></div>
-<div class="qbox" id="qb"><div class="qn" id="no"></div><h2 id="q"></h2><div id="opts"></div></div>
+<div class="split"><div class="qbox left" id="qb"><div class="qn" id="no"></div><h2 id="q"></h2></div>
+<div class="right"><div id="opts"></div>
 <div class="nav"><button class="alt" id="bp" onclick="go(cur-1)">← Sebelumnya</button><button class="fl" id="bf" onclick="flg()">Ragu-ragu</button><button id="bn" onclick="go(cur+1)">Berikutnya →</button></div>
 <div class="grid" id="grid"></div>
 <div class="lg"><span style="--c:#fff">Belum</span><span style="--c:#111;--b:1px solid #111">Sudah dijawab</span><span style="--c:repeating-linear-gradient(45deg,#fff,#fff 2px,#d4d4d4 2px,#d4d4d4 4px);--b:1px dashed #111">Ragu-ragu</span><span style="--c:#fff;--b:2px solid #111">Sedang dibuka</span></div>
-<button class="wide" style="margin-top:16px" onclick="selesai()">Selesaikan Ujian</button></div>
+<button class="wide" style="margin-top:16px" onclick="selesai()">Selesaikan Ujian</button></div></div></div>
 
 <div class="card res hide" id="s3">
 <h1>Hasil Asesmen</h1><p id="who" class="sub"></p>
