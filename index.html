@@ -4,75 +4,87 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;font-family:system-ui,Segoe UI,Arial,sans-serif;color:#1e293b;padding:18px;background:linear-gradient(135deg,#7f1d1d,#be123c 45%,#4c1d95);background-attachment:fixed}
-.card{max-width:760px;margin:0 auto;background:#fffffff2;border-radius:22px;padding:26px;box-shadow:0 20px 50px #0005;animation:pop .45s ease}
-@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
-h1{font-size:1.6rem;margin:0 0 4px;background:linear-gradient(90deg,#be123c,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{color:#64748b;margin:0 0 16px}.hero{font-size:3rem;text-align:center;animation:bob 2s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(-8px)}}
+body{margin:0;min-height:100vh;font-family:system-ui,Segoe UI,Arial,sans-serif;color:#111;padding:18px;background:linear-gradient(135deg,#f4f4f5,#fff 50%,#e4e4e7);background-attachment:fixed;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input{-webkit-user-select:text;user-select:text}
+body::before,body::after,html::before{content:"";position:fixed;border-radius:50%;filter:blur(70px);z-index:-1;pointer-events:none;animation:fl2 14s ease-in-out infinite alternate}
+body::before{width:44vmax;height:44vmax;background:#262626;opacity:.3;top:-12vmax;left:-10vmax}
+body::after{width:40vmax;height:40vmax;background:#737373;opacity:.4;bottom:-12vmax;right:-8vmax;animation-delay:-6s}
+html::before{width:28vmax;height:28vmax;background:#a3a3a3;opacity:.55;top:38%;left:55%;animation-duration:17s}
+@keyframes fl2{to{transform:translate(8vmax,6vmax) scale(1.15)}}
+.card{max-width:760px;margin:0 auto;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(26px) saturate(160%);backdrop-filter:blur(26px) saturate(160%);border:1px solid rgba(255,255,255,.85);border-radius:26px;padding:28px;box-shadow:0 10px 40px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.95);animation:pop .45s ease}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+h1{font-size:1.6rem;margin:0 0 4px;color:#111;letter-spacing:-.02em}
+.sub{color:#525252;margin:0 0 16px}.hero{display:none}
 label{display:block;font-weight:700;margin:14px 0 5px}
-input{width:100%;padding:12px 14px;border:2px solid #e2e8f0;border-radius:12px;font-size:1rem;transition:.2s}
-input:focus{outline:0;border-color:#be123c;box-shadow:0 0 0 4px #be123c22}
-button{cursor:pointer;border:0;border-radius:12px;padding:12px 20px;font-size:1rem;font-weight:700;color:#fff;background:linear-gradient(90deg,#be123c,#7c3aed);transition:.2s}
-button:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 18px #7c3aed44}button:active{transform:scale(.97)}
-button.alt{background:#e2e8f0;color:#1e293b}button.fl{background:#fef3c7;color:#92400e}button.fl.on{background:#f59e0b;color:#fff}
+input{width:100%;padding:12px 14px;border:1px solid rgba(0,0,0,.14);border-radius:14px;font-size:1rem;color:#111;background:rgba(255,255,255,.5);box-shadow:inset 0 1px 3px rgba(0,0,0,.06);transition:.2s}
+input::placeholder{color:#8a8a8a}
+input:focus{outline:0;border-color:#111;background:rgba(255,255,255,.85);box-shadow:0 0 0 4px rgba(0,0,0,.08)}
+button{cursor:pointer;border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:12px 20px;font-size:1rem;font-weight:600;color:#fff;background:rgba(17,17,17,.88);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.25);transition:.2s}
+button:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.25)}button:active{transform:scale(.97)}
+button.alt{background:rgba(255,255,255,.55);color:#111;border-color:rgba(255,255,255,.9);box-shadow:0 4px 14px rgba(0,0,0,.1),inset 0 1px 0 #fff}
+button.fl{background:rgba(255,255,255,.4);color:#111;border:1px dashed #111;box-shadow:none}button.fl.on{background:rgba(0,0,0,.14);border-style:solid}
 button:disabled{opacity:.35;cursor:default}.wide{width:100%;margin-top:6px}.hide{display:none}
 .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.chip{background:#ecfdf5;color:#047857;border-radius:99px;padding:5px 13px;font-weight:700;font-size:.85rem}
-.bar{height:10px;background:#e2e8f0;border-radius:9px;margin:12px 0 18px;overflow:hidden}
-.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f43f5e,#8b5cf6);border-radius:9px;transition:width .4s}
-.qbox{animation:pop .3s ease}.qn{font-size:.8rem;font-weight:800;letter-spacing:.08em;color:#be123c}
-h2{font-size:1.15rem;line-height:1.5;margin:4px 0 12px}
-.opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;margin:9px 0;background:#f8fafc;color:#1e293b;border:2px solid #e2e8f0;border-radius:14px}
-.opt b{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#e2e8f0;transition:.2s}
-.opt:hover:not(.on){border-color:#c4b5fd;background:#faf5ff}.opt.on{border-color:#be123c;background:#fff1f2;transform:translateX(6px)}
-.opt.on b{background:#be123c;color:#fff}
+.chip{background:rgba(255,255,255,.6);color:#111;border:1px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(0,0,0,.08);border-radius:99px;padding:5px 13px;font-weight:600;font-size:.85rem}
+.bar{height:8px;background:rgba(0,0,0,.09);border-radius:9px;margin:12px 0 20px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.1)}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#404040,#111);border-radius:9px;transition:width .4s}
+.qbox{animation:pop .3s ease}.qn{font-size:.78rem;font-weight:700;letter-spacing:.1em;color:#525252}
+h2{font-size:1.15rem;line-height:1.5;margin:4px 0 12px;color:#111}
+.opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;margin:9px 0;background:rgba(255,255,255,.5);color:#111;border:1px solid rgba(255,255,255,.9);border-radius:16px;font-weight:500;box-shadow:0 4px 14px rgba(0,0,0,.08),inset 0 1px 0 #fff}
+.opt b{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.08);transition:.2s}
+.opt:hover:not(.on){background:rgba(255,255,255,.8);border-color:#111}
+.opt.on{border-color:#111;background:rgba(255,255,255,.9);box-shadow:0 0 0 1px #111,0 10px 26px rgba(0,0,0,.22);transform:translateX(6px)}
+.opt.on b{background:#111;color:#fff}
 .nav{display:flex;justify-content:space-between;gap:8px;margin:16px 0}
 .grid{display:grid;grid-template-columns:repeat(10,1fr);gap:7px;margin:10px 0 12px}
-.grid button{padding:8px 0;font-size:.85rem;background:#fff;color:#64748b;border:2px solid #e2e8f0;border-radius:10px}
-.grid button.done{background:#10b981;border-color:#10b981;color:#fff}.grid button.flag{background:#f59e0b;border-color:#f59e0b;color:#fff}
-.grid button.cur{outline:3px solid #7c3aed;outline-offset:2px;transform:scale(1.1)}
-.lg{display:flex;flex-wrap:wrap;gap:12px;font-size:.78rem;color:#64748b}.lg span:before{content:"";display:inline-block;width:11px;height:11px;border-radius:4px;margin-right:5px;background:var(--c);border:1px solid #cbd5e1;vertical-align:-1px}
-.res{text-align:center}.score{font-size:4.5rem;font-weight:900;line-height:1;background:linear-gradient(90deg,#be123c,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent}
-.pred{display:inline-block;font-size:2rem;font-weight:900;color:#fff;border-radius:16px;padding:6px 26px;margin:10px 0;animation:bob 2s ease-in-out infinite}
-.A{background:#10b981}.B{background:#3b82f6}.C{background:#f97316}
-table{width:100%;border-collapse:collapse;margin:14px 0;text-align:left}td,th{padding:9px;border-bottom:1px solid #e2e8f0}
-body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}input{-webkit-user-select:text;user-select:text}
-#alarm{position:fixed;inset:0;z-index:99;display:grid;place-items:center;padding:16px;background:#dc2626;animation:fl .5s infinite alternate}
-@keyframes fl{to{background:#450a0a}}#alarm.hide{display:none}
-.ab{background:#fff;border-radius:22px;padding:28px;max-width:420px;width:100%;text-align:center}.si{font-size:4rem;animation:sh .3s infinite alternate}
-@keyframes sh{from{transform:rotate(-12deg)}to{transform:rotate(12deg)}}.err{color:#dc2626;font-weight:700;min-height:1.3em}
+.grid button{padding:8px 0;font-size:.85rem;font-weight:600;background:rgba(255,255,255,.5);color:#404040;border:1px solid rgba(0,0,0,.12);border-radius:11px;box-shadow:inset 0 1px 0 #fff}
+.grid button.done{background:rgba(17,17,17,.88);border-color:#111;color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.grid button.flag{background:repeating-linear-gradient(45deg,rgba(255,255,255,.7),rgba(255,255,255,.7) 4px,rgba(0,0,0,.14) 4px,rgba(0,0,0,.14) 8px);border:1px dashed #111;color:#111}
+.grid button.cur{outline:2px solid #111;outline-offset:2px;transform:scale(1.1)}
+.lg{display:flex;flex-wrap:wrap;gap:12px;font-size:.78rem;color:#525252}.lg span:before{content:"";display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;background:var(--c);border:var(--b,1px solid #8a8a8a);vertical-align:-1px}
+.res{text-align:center}.score{font-size:5rem;font-weight:900;line-height:1;color:#111;letter-spacing:-.04em;text-shadow:0 6px 24px rgba(0,0,0,.25)}
+.pred{display:inline-block;font-size:1.8rem;font-weight:800;border:1px solid rgba(255,255,255,.7);border-radius:16px;padding:6px 26px;margin:12px 0;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 8px 24px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.5)}
+.A{background:rgba(17,17,17,.88);color:#fff}.B{background:rgba(82,82,82,.85);color:#fff}.C{background:rgba(255,255,255,.7);color:#111;border-color:#111}
+table{width:100%;border-collapse:collapse;margin:14px 0;text-align:left}td,th{padding:9px;border-bottom:1px solid rgba(0,0,0,.1)}th{color:#525252;font-weight:600}
+#alarm{position:fixed;inset:0;z-index:99;display:grid;place-items:center;padding:16px;background:#fff;animation:fl .4s steps(1) infinite alternate}
+@keyframes fl{to{background:#111}}#alarm.hide{display:none}
+.ab{background:rgba(255,255,255,.7);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);border:2px solid #111;border-radius:26px;padding:28px;max-width:420px;width:100%;text-align:center;color:#111;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.si{width:76px;height:76px;margin:0 auto 10px;border-radius:50%;background:#111;color:#fff;font-size:3rem;font-weight:900;display:grid;place-items:center;animation:sh .3s infinite alternate}
+@keyframes sh{from{transform:rotate(-10deg)}to{transform:rotate(10deg)}}.err{color:#111;font-weight:700;min-height:1.3em}
+.dd{position:relative}.ddm{margin-top:6px;animation:pop .25s ease}
+.ddi{display:flex;justify-content:space-between;width:100%;text-align:left;margin:7px 0 0;background:rgba(255,255,255,.55);color:#111;border:1px solid rgba(255,255,255,.9);box-shadow:0 4px 14px rgba(0,0,0,.1),inset 0 1px 0 #fff}
+.ddi:hover:not(:disabled){border-color:#111}
 @media(max-width:520px){.grid{grid-template-columns:repeat(5,1fr)}.card{padding:18px}}
 </style></head><body>
 <div class="card" id="s1">
-<div class="hero">💻</div><h1>Asesmen Sumatif Informatika</h1><p class="sub">Kelas X - Semester 1 | 50 soal pilihan ganda</p>
+<h1>Asesmen Sumatif Informatika</h1><p class="sub">Kelas X - Semester 1 | 50 soal pilihan ganda</p>
 <label>Nama Lengkap</label><input id="nama" placeholder="Nama kamu">
 <label>Kelas</label><input id="kelas" placeholder="Contoh: X-1">
 <p class="sub" style="margin-top:14px">Materi: Dekomposisi, Stack-Sort-Queue, Web Scraping, Sistem Komputer.</p>
-<button class="wide" onclick="mulai()">Mulai Mengerjakan 🚀</button></div>
+<button class="wide" onclick="mulai()">Mulai Mengerjakan</button></div>
 
 <div class="card hide" id="s2">
 <div class="top"><b id="info"></b><span class="chip" id="stat"></span></div><div class="bar"><i id="pb"></i></div>
 <div class="qbox" id="qb"><div class="qn" id="no"></div><h2 id="q"></h2><div id="opts"></div></div>
-<div class="nav"><button class="alt" id="bp" onclick="go(cur-1)">← Sebelumnya</button><button class="fl" id="bf" onclick="flg()">🚩 Ragu-ragu</button><button id="bn" onclick="go(cur+1)">Berikutnya →</button></div>
+<div class="nav"><button class="alt" id="bp" onclick="go(cur-1)">← Sebelumnya</button><button class="fl" id="bf" onclick="flg()">Ragu-ragu</button><button id="bn" onclick="go(cur+1)">Berikutnya →</button></div>
 <div class="grid" id="grid"></div>
-<div class="lg"><span style="--c:#fff">Belum</span><span style="--c:#10b981">Sudah dijawab</span><span style="--c:#f59e0b">Ragu-ragu</span><span style="--c:#7c3aed">Sedang dibuka</span></div>
-<button class="wide" style="margin-top:16px" onclick="selesai()">Selesaikan Ujian ✅</button></div>
+<div class="lg"><span style="--c:#fff">Belum</span><span style="--c:#111;--b:1px solid #111">Sudah dijawab</span><span style="--c:repeating-linear-gradient(45deg,#fff,#fff 2px,#d4d4d4 2px,#d4d4d4 4px);--b:1px dashed #111">Ragu-ragu</span><span style="--c:#fff;--b:2px solid #111">Sedang dibuka</span></div>
+<button class="wide" style="margin-top:16px" onclick="selesai()">Selesaikan Ujian</button></div>
 
 <div class="card res hide" id="s3">
-<div class="hero">🎉</div><h1>Hasil Asesmen</h1><p id="who" class="sub"></p>
+<h1>Hasil Asesmen</h1><p id="who" class="sub"></p>
 <div class="score" id="sc">0</div><div class="pred" id="pr"></div><p id="ben"></p>
 <table id="tb"></table>
-<button class="wide" onclick="pdf()">⬇️ Download PDF Hasil</button>
-<p class="sub" style="margin:10px 0">Setelah PDF terunduh, upload file-nya secara manual ke folder Google Drive guru.</p>
-<button class="wide" onclick="window.open(DRIVE_URL,'_blank','noopener')">☁️ Upload ke Google Drive</button></div>
+<button class="wide" onclick="pdf()">Download PDF Hasil</button>
+<p class="sub" style="margin:10px 0">Setelah PDF terunduh, pilih folder kelasmu lalu upload file-nya secara manual.</p>
+<div class="dd"><button class="wide" id="ddb" onclick="ddt()">Upload ke Google Drive ▾</button><div class="ddm hide" id="ddm"></div></div></div>
 
-<div id="alarm" class="hide"><div class="ab"><div class="si">🚨</div>
-<h2 style="font-size:1.5rem;color:#dc2626">KAMU PINDAH TAB!</h2><p id="am"></p>
+<div id="alarm" class="hide"><div class="ab"><div class="si">!</div>
+<h2 style="font-size:1.5rem;color:#111">KAMU PINDAH TAB!</h2><p id="am"></p>
 <input id="pw" type="password" placeholder="Password dari guru" autocomplete="off"><p class="err" id="pe"></p>
 <button class="wide" onclick="buka()">Lanjutkan</button></div></div>
 <script>
-const DRIVE_URL="https://drive.google.com/drive/folders/1TRZidS6OvvE81zCtQA4BiTBygJGkzjbE?usp=sharing";
+const DRIVE=[["UPRAK_TIK_X2","https://drive.google.com/drive/folders/1kgTyiEQo46FyyVRcqoOWvh7RDao0ArCG?usp=sharing"],["UPRAK_TIK_X3","https://drive.google.com/drive/folders/1qFAjC5gk5T7pJijTqsHO_onMC9saKima?usp=sharing"],["UPRAK_TIK_X7","https://drive.google.com/drive/folders/1nmY7V26NeKZB35bne3HMNCpAIlaQ5LXC?usp=sharing"],["UPRAK_TIK_X8","https://drive.google.com/drive/folders/1TRZidS6OvvE81zCtQA4BiTBygJGkzjbE?usp=sharing"]];
 const T=["Dekomposisi","Stack, Sort, Queue","Web Scraping","Sistem Komputer"];
 const Q=[
 ["Memecah masalah yang kompleks menjadi bagian-bagian yang lebih kecil disebut ...",["Abstraksi","Dekomposisi","Pengenalan pola","Algoritma"],1],
@@ -191,6 +203,11 @@ window.addEventListener("blur",langgar);
 document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement)langgar()});
 ["copy","cut","paste","contextmenu","selectstart","dragstart"].forEach(t=>document.addEventListener(t,e=>e.preventDefault()));
 document.addEventListener("keydown",e=>{if(((e.ctrlKey||e.metaKey)&&"cvxaups".includes(e.key.toLowerCase()))||e.key==="F12"||e.key==="PrintScreen")e.preventDefault()});
+function ddt(){
+ const m=$("ddm");
+ if(!m.children.length)DRIVE.forEach(d=>{const b=document.createElement("button");b.className="ddi";b.innerHTML="<span></span><span>↗</span>";b.firstChild.textContent=d[0];b.onclick=()=>window.open(d[1],"_blank","noopener");m.appendChild(b)});
+ m.classList.toggle("hide");$("ddb").textContent="Upload ke Google Drive "+(m.classList.contains("hide")?"▾":"▴");
+}
 function predikat(s){return s>=90?"A+":s>=80?"A":s>=70?"B+":s>=60?"B":"C"}
 function selesai(){
  const k=ans.filter(a=>a<0).length;
